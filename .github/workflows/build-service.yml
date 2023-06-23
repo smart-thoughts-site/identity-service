@@ -21,6 +21,12 @@ jobs:
           echo "{repo}={$GITHUB_REPOSITORY}" >> $GITHUB_OUTPUT
           echo ::set-output name=name::${GITHUB_REPOSITORY////-}
 
+      - name: Docker meta
+          id: meta
+          uses: docker/metadata-action@v4
+          with:
+            images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -36,9 +42,8 @@ jobs:
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
-          tags: |
-            ghcr.io/${{ steps.release-vars.outputs.repo }}/${{ steps.release-vars.outputs.name }}:${{ steps.release-vars.outputs.tag }}
-            ghcr.io/${{ steps.release-vars.outputs.repo }}/${{ steps.release-vars.outputs.name }}:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           file: ./Dockerfile
           push: true
           labels: |
