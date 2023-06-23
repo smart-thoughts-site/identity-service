@@ -18,14 +18,12 @@ jobs:
         id: release-vars
         run: |
           echo ::set-output name=tag::$(date +'%y.%m.%d-%H%M')
-          echo "{repo}={$GITHUB_REPOSITORY}" >> $GITHUB_OUTPUT
-          echo ::set-output name=name::${GITHUB_REPOSITORY////-}
 
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: name/app
+          images: ghcr.io/${{ github.repository }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
