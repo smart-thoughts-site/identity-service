@@ -4,9 +4,10 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
       - uses: actions/checkout@v3
-      - run: rustup toolchain install stable --profile minimal
       - run: cargo version
       - uses: Swatinem/rust-cache@v2
       - name: Build project
@@ -17,7 +18,7 @@ jobs:
         id: release-vars
         run: |
           echo ::set-output name=tag::$(date +'%y.%m.%d-%H%M')
-          echo ::set-output name=repo::$GITHUB_REPOSITORY
+          echo "{repo}={$GITHUB_REPOSITORY}" >> $GITHUB_OUTPUT
           echo ::set-output name=name::${GITHUB_REPOSITORY////-}
 
       - name: Set up QEMU
