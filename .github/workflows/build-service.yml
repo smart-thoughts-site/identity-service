@@ -14,16 +14,14 @@ jobs:
         run: |
           cargo build --release --all-features
           strip target/release/identity-service
-      - name: Create release tag-name
-        id: release-vars
-        run: |
-          echo ::set-output name=tag::$(date +'%y.%m.%d-%H%M')
 
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
         with:
           images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value={{branch}}-{{date 'YYYYMMDD, h:mm:ss a'}}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -35,6 +33,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v4
         with:
