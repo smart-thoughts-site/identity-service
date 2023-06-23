@@ -2,12 +2,43 @@ name: build-service
 on: [push]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - run: rustup toolchain install stable --profile minimal
-            - run: cargo version
-            - uses: Swatinem/rust-cache@v2
-            - name: build
-              run: cargo build --release
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: rustup toolchain install stable --profile minimal
+      - run: cargo version
+      - uses: Swatinem/rust-cache@v2
+      - name: Build project
+        run: |
+          cargo build --release --all-features
+          strip target/release/query-server-rs
+      - name: Create release tag-name
+        id: release-vars
+        run: |
+          echo ::set-output name=tag::$(date +'%y.%m.%d-%H%M')
+          echo ::set-output name=repo::$GITHUB_REPOSITORY
+          echo ::set-output name=name::${GITHUB_REPOSITORY////-}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+      - uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v4
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: .
+          tags: |
+            ghcr.io/${{ steps.release-vars.outputs.repo }}/${{ steps.release-vars.outputs.name }}:${{ steps.release-vars.outputs.tag }}
+            ghcr.io/${{ steps.release-vars.outputs.repo }}/${{ steps.release-vars.outputs.name }}:latest
+          file: ./Dockerfile
+          push: true
+          labels: |
+            vendor="Demius Academius"
