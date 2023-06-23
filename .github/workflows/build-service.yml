@@ -42,7 +42,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: |
             ${{ steps.meta.outputs.labels }}
-            vendor="Demius Academius"
+            org.opencontainers.image.description=Identity service based on axum-rs
+            org.opencontainers.image.vendor=Demius Academius
           file: ./Dockerfile
           push: true
           provenance: false
