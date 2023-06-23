@@ -43,8 +43,8 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          labels: |
+            ${{ steps.meta.outputs.labels }}
+            vendor="Demius Academius"
           file: ./Dockerfile
           push: true
-          labels: |
-            vendor="Demius Academius"
