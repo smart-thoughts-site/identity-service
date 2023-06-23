@@ -21,7 +21,7 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=v-{{branch}}-${{date 'YYYYMMDD, h:mm:ss a'}}
+            type=raw,value=v-{{branch}}-{{date 'YYYYMMDD, h:mm:ss a'}}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
