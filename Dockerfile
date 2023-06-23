@@ -1,4 +1,5 @@
 FROM gcr.io/distroless/cc
+LABEL org.opencontainers.image.description identity-service-on-rust-axum
 
 EXPOSE 8080
 
