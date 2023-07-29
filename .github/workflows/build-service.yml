@@ -39,7 +39,9 @@ jobs:
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            latest
           labels: |
             ${{ steps.meta.outputs.labels }}
             org.opencontainers.image.description=Identity service based on axum-rs
