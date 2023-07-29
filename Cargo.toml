@@ -17,7 +17,7 @@ jsonwebtoken = "8.0"
 log = "0.4"
 ring = "0.16.20"        # generate password hash
 serde = "1.0"
-sqlx = { version = "0.6.3", features = ["runtime-tokio-rustls", "postgres", "macros", "time", "uuid"] }
+sqlx = { version = "0.7.1", features = ["runtime-tokio-rustls", "postgres", "macros", "time", "uuid"] }
 tokio = { version = "1", features = ["rt-multi-thread"] }
 
 # framework for instrumenting Rust programs to collect structured, event-based diagnostic information
