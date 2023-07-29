@@ -20,6 +20,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ghcr.io/${{ github.repository }}
+          flavor: latest=true
           tags: |
             type=raw,value={{branch}}-{{date 'YYYYMMDD-hhmmss'}}
 
@@ -39,9 +40,7 @@ jobs:
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
-          tags: |
-            ${{ steps.meta.outputs.tags }}
-            latest
+          tags: ${{ steps.meta.outputs.tags }}            
           labels: |
             ${{ steps.meta.outputs.labels }}
             org.opencontainers.image.description=Identity service based on axum-rs
