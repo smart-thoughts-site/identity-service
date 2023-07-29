@@ -1,7 +1,7 @@
-FROM alpine:latest
+FROM debian:bookworm-slim
 
 EXPOSE 8080
 
 COPY ./target/release/identity-service .
 
-ENTRYPOINT ["ls ."]
+ENTRYPOINT ["./identity-service"]
