@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/cc
+FROM alpine:latest
 
 EXPOSE 8080
 
