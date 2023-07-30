@@ -9,7 +9,6 @@ use sqlx::{
     Pool,
     Postgres
 };
-use uuid::Uuid;
 
 static PG_POOL: OnceLock<Pool<Postgres>> = OnceLock::new();
 
@@ -36,15 +35,15 @@ pub type SqlxResult<T> = Result<T, sqlx::error::Error>;
 
 #[derive(sqlx::FromRow)]
 pub struct User {
-    pub id: Uuid,
-    pub email: String,
+    pub username: String,
     pub salt: String,
-    pub password: String
+    pub password: String,
+    pub email: String,
 }
 
 pub async fn fetch_user(username: &str) -> SqlxResult<Option<User>> {
     let pool = pool();
-    sqlx::query_as::<_, User>("SELECT * FROM users WHERE email = ?")
+    sqlx::query_as::<_, User>("SELECT * FROM users WHERE username = ?")
         .bind(username)
         .fetch_optional(pool)
         .await
