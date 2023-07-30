@@ -7,6 +7,8 @@ use axum::{
     TypedHeader
 };
 
+use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
+
 // go ahead and run "cargo run main.rs"
 // localhost:4000 should now print out your user agent
 pub async fn index(TypedHeader(user_agent): TypedHeader<UserAgent>) -> String {
@@ -32,7 +34,19 @@ pub async fn login(
         .verify_password(&user.salt, &user.password, &payload.password)
         .map_err(|msg| unautohirzed(msg.to_string()))?;
 
-    let token = uuid::Uuid::new_v4().to_string();
+    let claims = Claims {
+        sub: user.email.to_owned(),
+        company: "ACME".to_owned(),
+        // Mandatory expiry time as UTC timestamp
+        exp: 2000000000, // May 2033
+    };
+
+    // Create the authorization token
+    let token = encode(&Header::default(), &claims, &EncodingKey::from_secret("secret".as_ref()))
+        .map_err(|_| unautohirzed("JWTTokenCreationError"))?;
+
+            
+    // let token = uuid::Uuid::new_v4().to_string();
     let response = LoginResponse {
         token
     };
@@ -41,6 +55,13 @@ pub async fn login(
 }
 
 use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Claims {
+    sub: String,
+    company: String,
+    exp: usize,
+}
 
 #[derive(Deserialize)]
 pub struct LoginRequest {
