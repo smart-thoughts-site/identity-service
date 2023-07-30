@@ -5,12 +5,13 @@ use axum::{
 use std::net::SocketAddr;
 
 mod authentication;
+mod db;
 mod persistence;
 mod rest;
 
 #[tokio::main]
 async fn main() {
-    persistence::init().await;
+    db::init().await;
 
     let state = authentication::new();
             
