@@ -54,13 +54,13 @@ pub async fn login(
     };
 
     // Create the authorization token
-    let token = encode(&Header::default(), &claims, &EncodingKey::from_secret("secret".as_ref()))
+    let access_token = encode(&Header::default(), &claims, &EncodingKey::from_secret("secret".as_ref()))
         .map_err(|_| unautohirzed("JWTTokenCreationError"))?;
 
-            
     // let token = uuid::Uuid::new_v4().to_string();
     let response = LoginResponse {
-        token
+        access_token,
+        token_type: "Bearer"
     };
 
     Ok((StatusCode::OK, Json(response)))
@@ -83,7 +83,8 @@ pub struct LoginRequest {
 
 #[derive(Serialize)]
 pub struct LoginResponse {
-    token: String
+    access_token: String,
+    token_type: &'static str
 }
 
 #[derive(Serialize)]

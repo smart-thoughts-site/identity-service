@@ -32,6 +32,6 @@ impl Authentication {
             attempted_password.as_bytes(),
             decoded_actual_password_hash.as_slice(),
         )
-            .map_err(|_| "Parola este incorecta")
+            .map_err(|_| "CredentialsDoNotMatch")
     }
 }
