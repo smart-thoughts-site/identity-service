@@ -59,6 +59,6 @@ jobs:
           registryUrl: ghcr.io
           registryUsername: ${{ github.actor }}
           registryPassword: ${{ secrets.GITHUB_TOKEN }}
-          imageToDeploy: ghcr.io/${{ github.repository }}:${{ steps.meta.outputs.tags }}
+          imageToDeploy: ${{ steps.meta.outputs.tags }}
           containerAppName: identity-service
           resourceGroup: DefaultResourceGroup-EUS
