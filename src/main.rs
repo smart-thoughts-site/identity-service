@@ -4,20 +4,18 @@ use axum::{
 };
 use std::net::SocketAddr;
 
-mod authentication;
-mod db;
-mod persistence;
-mod rest;
+mod auth;
+mod runtime;
 
 #[tokio::main]
 async fn main() {
-    db::init().await;
+    runtime::db::init().await;
 
-    let state = authentication::new();
+    let state = auth::passwords::new();
             
     let app = Router::new()
-        .route("/", get(rest::index))
-        .route("/login", post(rest::login))
+        .route("/", get(runtime::rest::index))
+        .route("/login", post(auth::rest::login))
         .with_state(state);
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));

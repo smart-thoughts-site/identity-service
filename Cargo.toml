@@ -10,6 +10,7 @@ edition = "2021"
 axum = { version= "0.6", features = ["headers"] }
 axum-server = "0.5"
 base64 = "0.21.2"       # endcode/decode password hash into/from Base64
+chrono = { version = "0.4.26", features = ["serde"] }
 data-encoding = "2.4.0" # endcode/decode password hash into/from Base64
 dotenv = "0.15.0"
 env_logger = "0.10.0"

@@ -5,16 +5,16 @@ use std::num::NonZeroU32;
 static PBKDF2_ALG: pbkdf2::Algorithm = pbkdf2::PBKDF2_HMAC_SHA512;
 
 #[derive(Clone)]
-pub struct Authentication {
+pub struct Passwords {
     iterations: NonZeroU32
 }
 
-pub fn new() -> Authentication {
+pub fn new() -> Passwords {
     let iterations = NonZeroU32::new(1000).unwrap();
-    Authentication { iterations }
+    Passwords { iterations }
 }
 
-impl Authentication {
+impl Passwords {
 
     pub fn verify_password(
         &self,
