@@ -15,7 +15,7 @@ pub fn new() -> Passwords {
 }
 
 impl Passwords {
-
+    
     pub fn verify_password(
         &self,
         salt: &str,

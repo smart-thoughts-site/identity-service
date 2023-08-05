@@ -68,7 +68,7 @@ pub fn generate_token(user: &User) -> Result<TokenDetails> {
         nbf: now.timestamp(),
     };
 
-    let header = jsonwebtoken::Header::new(jsonwebtoken::Algorithm::RS256);
+    let header = jsonwebtoken::Header::new(jsonwebtoken::Algorithm::HS256);
 
     let bytes_private_key = STANDARD.decode(PRIVATE_KEY).unwrap();
     let decoded_private_key = String::from_utf8(bytes_private_key).unwrap();
